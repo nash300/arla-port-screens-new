@@ -19,7 +19,6 @@ export default function PortDisplay() {
 
   const [portInfo, setPortInfo] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [cowTrigger, setCowTrigger] = useState(0);
 
   const rotatingStyle = {
     animation: "rotateY360 6s ease-in-out infinite",
@@ -36,14 +35,17 @@ export default function PortDisplay() {
       }
 
       const { data, error } = await supabase
-        .from("Port_info")
+        .from("Port_Screens")
         .select("*")
         .eq("port_nr", parsedPortNr);
 
       if (error) console.error("Supabase query error:", error);
       else setPortInfo(data.length > 0 ? data : null);
     } catch (error) {
-      console.error("Unexpected error:", error);
+      console.error(
+        "Unexpected error while retrieving data from the data:",
+        error,
+      );
     } finally {
       setLoading(false);
     }
@@ -60,21 +62,13 @@ export default function PortDisplay() {
       .channel("realtime-ports")
       .on(
         "postgres_changes",
-        { event: "*", schema: "public", table: "Port_info" },
-        () => fetchPortData()
+        { event: "*", schema: "public", table: "Port_Screens" },
+        () => fetchPortData(),
       )
       .subscribe();
 
     return () => supabase.removeChannel(channel);
   }, [parsedPortNr]);
-
-  // Trigger cow animation every 10 seconds
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCowTrigger((prev) => prev + 1);
-    }, 30000);
-    return () => clearInterval(interval);
-  }, []);
 
   return (
     <div className="vh-100 d-flex flex-column overflow-hidden">
@@ -127,31 +121,36 @@ export default function PortDisplay() {
             ) : (
               portInfo.map((item, index) => (
                 <div key={index} className="row">
-                  {[
-                    { label: "VÄNSTER", value: item.pos_left },
-                    { label: "MITT-VÄNSTER", value: item.pos_middle_left },
-                    { label: "MITT-HÖGER", value: item.pos_middle_right },
-                    { label: "HÖGER", value: item.pos_right },
-                  ].map(({ label, value }, idx) => (
-                    <div key={idx} className="col-3 d-flex flex-column p-2">
+                  {(() => {
+                    const lanes = [
+                      { label: "Lane 1", value: item.lane_1 },
+                      { label: "Lane 2", value: item.lane_2 },
+                      { label: "Lane 3", value: item.lane_3 },
+                      { label: "Lane 4", value: item.lane_4 },
+                    ];
+
+                    // Only keep lanes that actually have data
+                    const activeLanes = lanes.filter(
+                      (l) => l.value !== null && l.value !== "",
+                    );
+
+                    // Dynamic width based on number of active lanes
+                    const laneWidth = `${100 / activeLanes.length}%`;
+
+                    return activeLanes.map((lane, idx) => (
                       <div
-                        className="bg-dark text-white p-3 rounded-top text-center fw-bold d-flex align-items-center justify-content-center"
-                        style={{
-                          fontSize: "2vw",
-                          minHeight: "60px",
-                        }}
+                        key={idx}
+                        className="d-flex flex-column p-2"
+                        style={{ width: laneWidth }}
                       >
-                        {label}
-                      </div>
-                      <div
-                        className="rounded-bottom text-center d-flex align-items-center justify-content-center h-100 animate-box"
-                        style={{
-                          overflow: "hidden",
-                          boxShadow:
-                            "inset 1px 1px 20px rgba(184, 184, 184, 1)",
-                        }}
-                      >
-                        {value !== undefined && (
+                        <div
+                          className="rounded-bottom text-center d-flex align-items-center justify-content-center h-100 animate-box"
+                          style={{
+                            overflow: "hidden",
+                            boxShadow:
+                              "inset 1px 1px 20px rgba(184, 184, 184, 1)",
+                          }}
+                        >
                           <div
                             style={{
                               fontSize: "clamp(6vw, 8vw, 10vw)",
@@ -162,12 +161,12 @@ export default function PortDisplay() {
                               width: "100%",
                             }}
                           >
-                            <RootNumber rootNr={value} />
+                            <RootNumber rootNr={lane.value} />
                           </div>
-                        )}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ));
+                  })()}
                 </div>
               ))
             )}
@@ -192,20 +191,7 @@ export default function PortDisplay() {
               pointerEvents: "none",
               height: "100%",
             }}
-          >
-            <img
-              key={cowTrigger}
-              src="/running-cow.gif"
-              alt="Cow Animation"
-              style={{
-                position: "absolute",
-                left: "-20%",
-                height: "100%",
-                animation: "moveCow 7s linear 1",
-                zIndex: 9999,
-              }}
-            />
-          </div>
+          ></div>
 
           {/* Message Text */}
           <div style={{ position: "relative", zIndex: 2 }}>
@@ -219,11 +205,6 @@ export default function PortDisplay() {
 
           <style>
             {`
-              @keyframes moveCow {
-                0% { left: -20%; }
-                100% { left: 120%; }
-              }
-
               @keyframes blinkEffect {
                 0% { opacity: 0; }
                 50% { opacity: 0.9; }
@@ -231,7 +212,7 @@ export default function PortDisplay() {
               }
 
               .blinking-text {
-                animation: blinkEffect 3s infinite ease-in-out;
+                animation: blinkEffect 2s infinite ease-in-out;
               }
             `}
           </style>

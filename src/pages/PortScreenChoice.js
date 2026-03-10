@@ -30,7 +30,6 @@ export default function PortScreenChoice() {
     fetchPortData();
   }, []);
 
-  // ✅ Corrected navigation
   const portClickHandler = (portNumber) => {
     navigate(`/PortDisplay/${portNumber}`);
   };

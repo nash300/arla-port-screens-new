@@ -1,5 +1,4 @@
 import "./App.css";
-import LogInPage from "./pages/LogInPage";
 import PortScreenChoice from "./pages/PortScreenChoice";
 import MenuPage from "./pages/MenuPage";
 import PortDisplay from "./pages/PortDisplay";
@@ -10,10 +9,8 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<LogInPage />} />
-        <Route path="/PortScreenChoice" element={<PortScreenChoice />} />
+        <Route path="/" element={<PortScreenChoice />} />
         <Route path="/MenuPage" element={<MenuPage />} />
-        {/* 👇 Important: route parameter added here */}
         <Route path="/PortDisplay/:portNr" element={<PortDisplay />} />
         <Route path="/ChangeUpdatePage" element={<ChangeUpdatePage />} />
       </Routes>
