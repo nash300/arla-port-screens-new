@@ -144,24 +144,42 @@ export default function PortDisplay() {
                         style={{ width: laneWidth }}
                       >
                         <div
-                          className="rounded-bottom text-center d-flex align-items-center justify-content-center h-100 animate-box"
+                          className="lane-wrapper"
                           style={{
-                            overflow: "hidden",
-                            boxShadow:
-                              "inset 1px 1px 20px rgba(184, 184, 184, 1)",
+                            display: "flex",
+                            flexGrow: 1,
                           }}
                         >
+                          {/* Main green box */}
                           <div
+                            className="lane-box"
                             style={{
-                              fontSize: "clamp(6vw, 8vw, 10vw)",
-                              textAlign: "center",
-                              whiteSpace: "nowrap",
-                              overflow: "hidden",
-                              textOverflow: "ellipsis",
+                              background:
+                                "linear-gradient(145deg, #28a745, #1c7b32ff)",
+                              boxShadow:
+                                "inset 1px 1px 20px rgba(184, 184, 184, 1)",
+                              height: "100%",
                               width: "100%",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+
+                              borderTopLeftRadius: "40px",
+                              borderTopRightRadius: "40px",
+                              borderBottomLeftRadius: "90px",
+                              borderBottomRightRadius: "20px",
                             }}
                           >
-                            <RootNumber rootNr={lane.value} />
+                            <div
+                              style={{
+                                fontSize: `clamp(4vh, ${70 / lane.value.length}vw, 18vh)`,
+                                lineHeight: "1",
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                              }}
+                            >
+                              <RootNumber rootNr={lane.value} />
+                            </div>
                           </div>
                         </div>
                       </div>
