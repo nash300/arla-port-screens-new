@@ -59,16 +59,34 @@ export default function PortDisplay() {
     if (!parsedPortNr || isNaN(parsedPortNr)) return;
 
     const channel = supabase
-      .channel("realtime-ports")
+      .channel(`realtime-port-${parsedPortNr}`)
       .on(
         "postgres_changes",
-        { event: "*", schema: "public", table: "Port_Screens" },
-        () => fetchPortData(),
+        {
+          event: "*",
+          schema: "public",
+          table: "Port_Screens",
+          filter: `port_nr=eq.${parsedPortNr}`, // ← server-side filtering
+        },
+        (payload) => {
+          const isRelevant =
+            payload.eventType === "INSERT" ||
+            payload.eventType === "UPDATE" ||
+            payload.eventType === "DELETE" ||
+            payload.new?.port_nr === parsedPortNr ||
+            payload.old?.port_nr === parsedPortNr;
+
+          if (isRelevant) {
+            fetchPortData();
+          }
+        },
       )
       .subscribe();
 
     return () => supabase.removeChannel(channel);
   }, [parsedPortNr]);
+
+
 
   return (
     <div className="vh-100 d-flex flex-column overflow-hidden">
