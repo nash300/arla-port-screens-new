@@ -7,7 +7,7 @@ const RootNumber = ({ rootNr }) => {
   const chars = String(rootNr).split("");
 
   return (
-    <div className="shiny-text" style={{ fontWeight: 900 }}>
+    <div style={{ fontWeight: 900 }}>
       {chars.map((ch, i) => {
         const isLetter = /[A-Za-z]/.test(ch);
 
@@ -15,26 +15,16 @@ const RootNumber = ({ rootNr }) => {
           <span
             key={i}
             style={{
-              color: isLetter ? "#ff0505" : "white", // Blue letter, white numbers
+              color: isLetter ? "#ff9d00" : "white", // Blue letter, white numbers
               textShadow: isLetter
-                ? "0px 0px 12px rgba(0, 0, 0, 0.8)"
-                : "1px 12px 15px rgba(0,0,0,0.54)",
+                ? "0px 0px 12px rgba(0, 0, 0, 0.75)"
+                : "1px 12px 15px rgba(55, 115, 47, 0.97)",
             }}
           >
             {ch}
           </span>
         );
       })}
-
-      <style>
-        {`
-          .shiny-text {
-            text-shadow:
-              1px 12px 15px rgba(0, 0, 0, 0.54),
-              0 0 0px rgba(255,255,255,0.6);
-          }
-        `}
-      </style>
     </div>
   );
 };

@@ -86,8 +86,6 @@ export default function PortDisplay() {
     return () => supabase.removeChannel(channel);
   }, [parsedPortNr]);
 
-
-
   return (
     <div className="vh-100 d-flex flex-column overflow-hidden">
       {/* Header */}
@@ -110,9 +108,11 @@ export default function PortDisplay() {
           </h1>
         </div>
       </div>
-
       {/* Middle Section */}
-      <div className="d-flex flex-grow-1 justify-content-center position-relative">
+      <div
+        className="d-flex flex-grow-1 justify-content-center position-relative"
+       
+      >
         <div className="container-fluid h-100">
           <div className="row h-100 gap-2 justify-content-center">
             {loading ? (
@@ -173,19 +173,19 @@ export default function PortDisplay() {
                             className="lane-box"
                             style={{
                               background:
-                                "linear-gradient(145deg, #28a745, #1c7b32ff)",
+                                "linear-gradient(145deg, #18c641, rgb(28, 123, 50))",
                               boxShadow:
-                                "inset 1px 1px 20px rgba(184, 184, 184, 1)",
-                              height: "100%",
+                                "inset 1px 1px 10px rgb(85, 80, 80)",
+                              height: "auto",
                               width: "100%",
                               display: "flex",
                               alignItems: "center",
                               justifyContent: "center",
 
-                              borderTopLeftRadius: "40px",
-                              borderTopRightRadius: "40px",
-                              borderBottomLeftRadius: "90px",
-                              borderBottomRightRadius: "20px",
+                              borderTopLeftRadius: "10px",
+                              borderTopRightRadius: "10px",
+                              borderBottomLeftRadius: "50px",
+                              borderBottomRightRadius: "190px",
                             }}
                           >
                             <div
@@ -209,30 +209,16 @@ export default function PortDisplay() {
           </div>
         </div>
       </div>
-
       {/* Bottom Section */}
       {portInfo && portInfo.some((item) => item.msg !== null) && (
         <div
-          className="bg-warning text-white d-flex align-items-center justify-content-center text-center position-relative overflow-hidden"
+          className="bg-dark text-white d-flex align-items-center justify-content-center text-center position-relative overflow-hidden"
           style={{ height: "15vh" }}
         >
-          {/* Running cow GIF */}
-          <div
-            style={{
-              position: "absolute",
-              bottom: "0",
-              left: "0",
-              width: "100%",
-              overflow: "hidden",
-              pointerEvents: "none",
-              height: "100%",
-            }}
-          ></div>
-
           {/* Message Text */}
           <div style={{ position: "relative", zIndex: 2 }}>
             <h1
-              className="blinking-text fw-bold text-black"
+              className="blinking-text fw-bold "
               style={{ fontSize: "calc(6vh + 2vw)", whiteSpace: "nowrap" }}
             >
               {portInfo.find((item) => item.msg)?.msg}

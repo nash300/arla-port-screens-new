@@ -13,6 +13,7 @@ export default function ChangeUpdatePage() {
   const [selectedHours, setSelectedHours] = useState(10);
   const [selectedMinutes, setSelectedMinutes] = useState(1);
   const [portList, setPortList] = useState([]);
+  const [numOfLanes, setNumOfLanes] = useState(1);
 
   const navigate = useNavigate();
 
@@ -150,6 +151,24 @@ export default function ChangeUpdatePage() {
                   ))}
                 </select>
               </div>
+              {/* number of lanes selection */}
+
+              <div className="d-flex flex-column">
+                <label className="form-label fw-bold text-dark text-start">
+                  Antal rutter
+                </label>
+                <select
+                  value={numOfLanes}
+                  onChange={(e) => setNumOfLanes(Number(e.target.value))}
+                  className="form-select border border-success text-dark p-2"
+                >
+                  {Array.from({ length: 4 }, (_, i) => i + 1).map((num) => (
+                    <option key={num} value={num}>
+                      {num}
+                    </option>
+                  ))}
+                </select>
+              </div>
               {portList.includes(Number(selectedPortNumber)) && (
                 <button
                   type="button"
@@ -162,205 +181,211 @@ export default function ChangeUpdatePage() {
             </div>
           </div>
 
-          {/* Routes */}
-          {/* 1 LANE */}
-          <div
-            className="mb-2 border-3 p-3 rounded"
-            style={{
-              backgroundImage:
-                "linear-gradient(rgba(0, 0, 0, 0.14), rgba(243, 243, 243, 0.4)), url('/1.jpg')",
-              backgroundSize: "contain",
-              backgroundRepeat: "no-repeat",
-              backgroundPosition: "center",
-              minHeight: "130px",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "flex-end",
-            }}
-          >
+          {/* Selecting # OF LANES*/}
+
+          {numOfLanes === 1 && (
             <div
+              className="mb-2 border-3 p-3 rounded"
               style={{
+                backgroundImage:
+                  "linear-gradient(rgba(0, 0, 0, 0.14), rgba(243, 243, 243, 0.4)), url('/1.jpg')",
+                backgroundSize: "contain",
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "center",
+                minHeight: "130px",
                 display: "flex",
-                justifyContent: "space-between",
-                width: "100%",
+                flexDirection: "column",
+                justifyContent: "flex-end",
               }}
             >
-              {[lane_1].map((value, idx) => {
-                const setters = [setLane_1, undefined, undefined, undefined];
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  width: "100%",
+                }}
+              >
+                {[lane_1].map((value, idx) => {
+                  const setters = [setLane_1, undefined, undefined, undefined];
 
-                return (
-                  <div
-                    key={idx}
-                    style={{
-                      flex: 1,
-                      display: "flex",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <input
-                      type="text"
-                      value={value}
-                      onChange={(e) =>
-                        setters[idx](e.target.value.toUpperCase())
-                      }
-                      className="form-control border border-success text-dark text-center"
-                      style={{ width: "80px" }}
-                    />
-                  </div>
-                );
-              })}
+                  return (
+                    <div
+                      key={idx}
+                      style={{
+                        flex: 1,
+                        display: "flex",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <input
+                        type="text"
+                        maxLength={4}
+                        value={value}
+                        onChange={(e) =>
+                          setters[idx](e.target.value.toUpperCase())
+                        }
+                        className="form-control border border-success text-dark text-center"
+                        style={{ width: "100px" }}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-          </div>
+          )}
 
-          {/* 2 LANES */}
-
-          <div
-            className="mb-2 border p-3 rounded"
-            style={{
-              backgroundImage:
-                "linear-gradient(rgba(0, 0, 0, 0.14), rgba(243, 243, 243, 0.4)), url('/2.jpg')",
-              backgroundSize: "contain",
-              backgroundRepeat: "no-repeat",
-              backgroundPosition: "center",
-              minHeight: "130px",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "flex-end",
-            }}
-          >
+          {numOfLanes === 2 && (
             <div
+              className="mb-2 border p-3 rounded"
               style={{
+                backgroundImage:
+                  "linear-gradient(rgba(0, 0, 0, 0.14), rgba(243, 243, 243, 0.4)), url('/2.jpg')",
+                backgroundSize: "contain",
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "center",
+                minHeight: "130px",
                 display: "flex",
-                justifyContent: "space-between",
-                width: "100%",
+                flexDirection: "column",
+                justifyContent: "flex-end",
               }}
             >
-              {[lane_1, lane_2].map((value, idx) => {
-                const setters = [setLane_1, setLane_2, undefined, undefined];
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  width: "100%",
+                }}
+              >
+                {[lane_1, lane_2].map((value, idx) => {
+                  const setters = [setLane_1, setLane_2, undefined, undefined];
 
-                return (
-                  <div
-                    key={idx}
-                    style={{
-                      flex: 1,
-                      display: "flex",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <input
-                      type="text"
-                      value={value}
-                      onChange={(e) =>
-                        setters[idx](e.target.value.toUpperCase())
-                      }
-                      className="form-control border border-success text-dark text-center"
-                      style={{ width: "80px" }}
-                    />
-                  </div>
-                );
-              })}
+                  return (
+                    <div
+                      key={idx}
+                      style={{
+                        flex: 1,
+                        display: "flex",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <input
+                        type="text"
+                        maxLength={4}
+                        value={value}
+                        onChange={(e) =>
+                          setters[idx](e.target.value.toUpperCase())
+                        }
+                        className="form-control border border-success text-dark text-center"
+                        style={{ width: "100px" }}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-          </div>
+          )}
 
-          {/* 3 LANES */}
-
-          <div
-            className="mb-2 border p-3 rounded"
-            style={{
-              backgroundImage:
-                "linear-gradient(rgba(0, 0, 0, 0.14), rgba(243, 243, 243, 0.4)), url('/3.jpg')",
-              backgroundSize: "contain",
-              backgroundRepeat: "no-repeat",
-              backgroundPosition: "center",
-              minHeight: "130px",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "flex-end",
-            }}
-          >
+          {numOfLanes === 3 && (
             <div
+              className="mb-2 border p-3 rounded"
               style={{
+                backgroundImage:
+                  "linear-gradient(rgba(0, 0, 0, 0.14), rgba(243, 243, 243, 0.4)), url('/3.jpg')",
+                backgroundSize: "contain",
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "center",
+                minHeight: "130px",
                 display: "flex",
-                justifyContent: "space-between",
-                width: "100%",
+                flexDirection: "column",
+                justifyContent: "flex-end",
               }}
             >
-              {[lane_1, lane_2, lane_3].map((value, idx) => {
-                const setters = [setLane_1, setLane_2, setLane_3, undefined];
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  width: "100%",
+                }}
+              >
+                {[lane_1, lane_2, lane_3].map((value, idx) => {
+                  const setters = [setLane_1, setLane_2, setLane_3, undefined];
 
-                return (
-                  <div
-                    key={idx}
-                    style={{
-                      flex: 1,
-                      display: "flex",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <input
-                      type="text"
-                      value={value}
-                      onChange={(e) =>
-                        setters[idx](e.target.value.toUpperCase())
-                      }
-                      className="form-control border border-success text-dark text-center"
-                      style={{ width: "80px" }}
-                    />
-                  </div>
-                );
-              })}
+                  return (
+                    <div
+                      key={idx}
+                      style={{
+                        flex: 1,
+                        display: "flex",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <input
+                        type="text"
+                        maxLength={4}
+                        value={value}
+                        onChange={(e) =>
+                          setters[idx](e.target.value.toUpperCase())
+                        }
+                        className="form-control border border-success text-dark text-center"
+                        style={{ width: "100px" }}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-          </div>
+          )}
 
-          {/* 4 LANES */}
-
-          <div
-            className="mb-2 border p-3 rounded"
-            style={{
-              backgroundImage:
-                "linear-gradient(rgba(0, 0, 0, 0.14), rgba(243, 243, 243, 0.4)), url('/4.jpg')",
-              backgroundSize: "contain",
-              backgroundRepeat: "no-repeat",
-              backgroundPosition: "center",
-              minHeight: "130px",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "flex-end",
-            }}
-          >
+          {numOfLanes === 4 && (
             <div
+              className="mb-2 border p-3 rounded"
               style={{
+                backgroundImage:
+                  "linear-gradient(rgba(0, 0, 0, 0.14), rgba(243, 243, 243, 0.4)), url('/4.jpg')",
+                backgroundSize: "contain",
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "center",
+                minHeight: "130px",
                 display: "flex",
-                justifyContent: "space-between",
-                width: "100%",
+                flexDirection: "column",
+                justifyContent: "flex-end",
               }}
             >
-              {[lane_1, lane_2, lane_3, lane_4].map((value, idx) => {
-                const setters = [setLane_1, setLane_2, setLane_3, setLane_4];
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  width: "100%",
+                }}
+              >
+                {[lane_1, lane_2, lane_3, lane_4].map((value, idx) => {
+                  const setters = [setLane_1, setLane_2, setLane_3, setLane_4];
 
-                return (
-                  <div
-                    key={idx}
-                    style={{
-                      flex: 1,
-                      display: "flex",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <input
-                      type="text"
-                      value={value}
-                      onChange={(e) =>
-                        setters[idx](e.target.value.toUpperCase())
-                      }
-                      className="form-control border border-success text-dark text-center"
-                      style={{ width: "80px" }}
-                    />
-                  </div>
-                );
-              })}
+                  return (
+                    <div
+                      key={idx}
+                      style={{
+                        flex: 1,
+                        display: "flex",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <input
+                        type="text"
+                        maxLength={4}
+                        value={value}
+                        onChange={(e) =>
+                          setters[idx](e.target.value.toUpperCase())
+                        }
+                        className="form-control border border-success text-dark text-center"
+                        style={{ width: "100px" }}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Time */}
           <div className="mb-4 text-center border p-3 rounded">
