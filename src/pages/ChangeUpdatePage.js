@@ -5,10 +5,10 @@ import { useNavigate } from "react-router-dom";
 
 export default function ChangeUpdatePage() {
   const [selectedPortNumber, setSelectedPortNumber] = useState("");
-  const [leftRoute, setLeftRoute] = useState("");
-  const [middleLeftRoute, setMiddleLeftRoute] = useState("");
-  const [middleRightRoute, setMiddleRightRoute] = useState("");
-  const [rightRoute, setRightRoute] = useState("");
+  const [lane_1, setLane_1] = useState("");
+  const [lane_2, setLane_2] = useState("");
+  const [lane_3, setLane_3] = useState("");
+  const [lane_4, setLane_4] = useState("");
   const [message, setMessage] = useState("");
   const [selectedHours, setSelectedHours] = useState(10);
   const [selectedMinutes, setSelectedMinutes] = useState(1);
@@ -31,7 +31,7 @@ export default function ChangeUpdatePage() {
     const fetchPorts = async () => {
       try {
         const { data, error } = await supabase
-          .from("Port_info")
+          .from("Port_Screens")
           .select("port_nr");
         if (error) throw error;
         setPortList(data.map((item) => parseInt(item.port_nr, 10)));
@@ -51,26 +51,26 @@ export default function ChangeUpdatePage() {
     const totalMinutes = hours * 60 + minutes;
 
     if (!selectedPortNumber) return alert("Välj ett portnummer!");
-    if (!(leftRoute || middleLeftRoute || middleRightRoute || rightRoute))
+    if (!(lane_1 || lane_2 || lane_3 || lane_4))
       return alert("Välj minst ett ruttnummer!");
     if (totalMinutes <= 0) return alert("Tidgräns kan inte vara 0!");
 
     try {
       // Remove any old data for that port
       const { error: deleteError } = await supabase
-        .from("Port_info")
+        .from("Port_Screens")
         .delete()
         .eq("port_nr", selectedPortNumber);
       if (deleteError) throw deleteError;
 
       // Insert new data
-      const { error } = await supabase.from("Port_info").insert([
+      const { error } = await supabase.from("Port_Screens").insert([
         {
           port_nr: selectedPortNumber,
-          pos_left: leftRoute,
-          pos_middle_left: middleLeftRoute,
-          pos_middle_right: middleRightRoute,
-          pos_right: rightRoute,
+          lane_1: lane_1,
+          lane_2: lane_2,
+          lane_3: lane_3,
+          lane_4: lane_4,
           time_limit: totalMinutes,
           msg: message || null,
         },
@@ -80,16 +80,15 @@ export default function ChangeUpdatePage() {
 
       // Reset form
       setSelectedPortNumber("");
-      setLeftRoute("");
-      setMiddleLeftRoute("");
-      setMiddleRightRoute("");
-      setRightRoute("");
+      setLane_1("");
+      setLane_2("");
+      setLane_3("");
+      setLane_4("");
       setSelectedHours(0);
       setSelectedMinutes(1);
       setMessage("");
-
-      // Go to display screen via URL param
-      navigate(`/PortDisplay/${selectedPortNumber}`);
+      // Reload the page
+      window.location.reload();
     } catch (err) {
       console.error("Database error:", err);
       alert("Ett fel uppstod vid uppdatering av databasen.");
@@ -98,12 +97,12 @@ export default function ChangeUpdatePage() {
 
   const handleDeleteButton = async () => {
     const confirmDelete = window.confirm(
-      "Är du säker på att du vill återställa denna skärm?"
+      "Är du säker på att du vill återställa denna skärm?",
     );
     if (!confirmDelete) return;
     try {
       const { error } = await supabase
-        .from("Port_info")
+        .from("Port_Screens")
         .delete()
         .eq("port_nr", selectedPortNumber);
       if (error) throw error;
@@ -164,37 +163,202 @@ export default function ChangeUpdatePage() {
           </div>
 
           {/* Routes */}
-          <div className="mb-4 border p-3 rounded">
-            <label className="form-label fw-bold text-dark d-block text-center mb-3">
-              Ruttnummer:
-            </label>
-            <div className="row g-3 text-center">
-              {[
-                { label: "VÄNSTER", value: leftRoute, set: setLeftRoute },
-                {
-                  label: "MITT-VÄNSTER",
-                  value: middleLeftRoute,
-                  set: setMiddleLeftRoute,
-                },
-                {
-                  label: "MITT-HÖGER",
-                  value: middleRightRoute,
-                  set: setMiddleRightRoute,
-                },
-                { label: "HÖGER", value: rightRoute, set: setRightRoute },
-              ].map(({ label, value, set }, idx) => (
-                <div className="col-12 col-md-3" key={idx}>
-                  <h5 className="text-success fw-bold border-bottom pb-1">
-                    {label}
-                  </h5>
-                  <input
-                    type="text"
-                    value={value}
-                    onChange={(e) => set(e.target.value.toUpperCase())}
-                    className="form-control border border-success text-dark text-center"
-                  />
-                </div>
-              ))}
+          {/* 1 LANE */}
+          <div
+            className="mb-2 border-3 p-3 rounded"
+            style={{
+              backgroundImage:
+                "linear-gradient(rgba(0, 0, 0, 0.14), rgba(243, 243, 243, 0.4)), url('/1.jpg')",
+              backgroundSize: "contain",
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: "center",
+              minHeight: "130px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "flex-end",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                width: "100%",
+              }}
+            >
+              {[lane_1].map((value, idx) => {
+                const setters = [setLane_1, undefined, undefined, undefined];
+
+                return (
+                  <div
+                    key={idx}
+                    style={{
+                      flex: 1,
+                      display: "flex",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <input
+                      type="text"
+                      value={value}
+                      onChange={(e) =>
+                        setters[idx](e.target.value.toUpperCase())
+                      }
+                      className="form-control border border-success text-dark text-center"
+                      style={{ width: "80px" }}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* 2 LANES */}
+
+          <div
+            className="mb-2 border p-3 rounded"
+            style={{
+              backgroundImage:
+                "linear-gradient(rgba(0, 0, 0, 0.14), rgba(243, 243, 243, 0.4)), url('/2.jpg')",
+              backgroundSize: "contain",
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: "center",
+              minHeight: "130px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "flex-end",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                width: "100%",
+              }}
+            >
+              {[lane_1, lane_2].map((value, idx) => {
+                const setters = [setLane_1, setLane_2, undefined, undefined];
+
+                return (
+                  <div
+                    key={idx}
+                    style={{
+                      flex: 1,
+                      display: "flex",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <input
+                      type="text"
+                      value={value}
+                      onChange={(e) =>
+                        setters[idx](e.target.value.toUpperCase())
+                      }
+                      className="form-control border border-success text-dark text-center"
+                      style={{ width: "80px" }}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* 3 LANES */}
+
+          <div
+            className="mb-2 border p-3 rounded"
+            style={{
+              backgroundImage:
+                "linear-gradient(rgba(0, 0, 0, 0.14), rgba(243, 243, 243, 0.4)), url('/3.jpg')",
+              backgroundSize: "contain",
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: "center",
+              minHeight: "130px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "flex-end",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                width: "100%",
+              }}
+            >
+              {[lane_1, lane_2, lane_3].map((value, idx) => {
+                const setters = [setLane_1, setLane_2, setLane_3, undefined];
+
+                return (
+                  <div
+                    key={idx}
+                    style={{
+                      flex: 1,
+                      display: "flex",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <input
+                      type="text"
+                      value={value}
+                      onChange={(e) =>
+                        setters[idx](e.target.value.toUpperCase())
+                      }
+                      className="form-control border border-success text-dark text-center"
+                      style={{ width: "80px" }}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* 4 LANES */}
+
+          <div
+            className="mb-2 border p-3 rounded"
+            style={{
+              backgroundImage:
+                "linear-gradient(rgba(0, 0, 0, 0.14), rgba(243, 243, 243, 0.4)), url('/4.jpg')",
+              backgroundSize: "contain",
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: "center",
+              minHeight: "130px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "flex-end",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                width: "100%",
+              }}
+            >
+              {[lane_1, lane_2, lane_3, lane_4].map((value, idx) => {
+                const setters = [setLane_1, setLane_2, setLane_3, setLane_4];
+
+                return (
+                  <div
+                    key={idx}
+                    style={{
+                      flex: 1,
+                      display: "flex",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <input
+                      type="text"
+                      value={value}
+                      onChange={(e) =>
+                        setters[idx](e.target.value.toUpperCase())
+                      }
+                      className="form-control border border-success text-dark text-center"
+                      style={{ width: "80px" }}
+                    />
+                  </div>
+                );
+              })}
             </div>
           </div>
 
