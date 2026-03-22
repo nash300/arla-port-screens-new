@@ -109,137 +109,182 @@ export default function PortDisplay() {
         </div>
       </div>
       {/* Middle Section */}
-      <div
-        className="d-flex flex-grow-1 justify-content-center position-relative"
-       
-      >
-        <div className="container-fluid h-100">
-          <div className="row h-100 gap-2 justify-content-center">
-            {loading ? (
-              <div className="d-flex align-items-center justify-content-center w-100 h-100">
-                <p>Loading data...</p>
-              </div>
-            ) : !portInfo ? (
-              <div className="d-flex align-items-center justify-content-center w-100 h-100">
-                <img
-                  src="/cow.png"
-                  alt="No data"
-                  className="img-fluid"
-                  style={rotatingStyle}
-                />
-                <style>
-                  {`
-                    @keyframes rotateY360 {
-                      from { transform: rotateY(0deg); }
-                      to { transform: rotateY(360deg); }
-                    }
-                  `}
-                </style>
-              </div>
-            ) : (
-              portInfo.map((item, index) => (
-                <div key={index} className="row">
-                  {(() => {
+
+      {/* Middle + Bottom Wrapper */}
+      <div className="d-flex flex-column" style={{ height: "80vh" }}>
+        {/* Middle Section — 70% */}
+        {/* Middle Section — 70% */}
+        <div
+          className="d-flex justify-content-center position-relative"
+          style={{
+            flex: "0 0 70%",
+            backgroundImage:
+              portInfo && portInfo[0]
+                ? (() => {
                     const lanes = [
-                      { label: "Lane 1", value: item.lane_1 },
-                      { label: "Lane 2", value: item.lane_2 },
-                      { label: "Lane 3", value: item.lane_3 },
-                      { label: "Lane 4", value: item.lane_4 },
+                      portInfo[0].lane_1,
+                      portInfo[0].lane_2,
+                      portInfo[0].lane_3,
+                      portInfo[0].lane_4,
                     ];
 
-                    // Only keep lanes that actually have data
-                    const activeLanes = lanes.filter(
-                      (l) => l.value !== null && l.value !== "",
-                    );
+                    const activeCount = lanes.filter(
+                      (l) => l !== null && l !== "",
+                    ).length;
 
-                    // Dynamic width based on number of active lanes
-                    const laneWidth = `${100 / activeLanes.length}%`;
+                    return `url('/${activeCount}.jpg')`;
+                  })()
+                : "none",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        >
+          <div className="container-fluid h-100">
+            <div className="row h-100 gap-2 justify-content-center">
+              {loading ? (
+                <div className="d-flex align-items-center justify-content-center w-100 h-100">
+                  <p>Loading data...</p>
+                </div>
+              ) : !portInfo ? (
+                <div className="d-flex align-items-center justify-content-center w-100 h-100">
+                  <img
+                    src="/cow.png"
+                    alt="No data"
+                    className="img-fluid"
+                    style={rotatingStyle}
+                  />
+                </div>
+              ) : (
+                portInfo.map((item, index) => (
+                  <div key={index} className="row">
+                    {(() => {
+                      const lanes = [
+                        { label: "Lane 1", value: item.lane_1 },
+                        { label: "Lane 2", value: item.lane_2 },
+                        { label: "Lane 3", value: item.lane_3 },
+                        { label: "Lane 4", value: item.lane_4 },
+                      ];
 
-                    return activeLanes.map((lane, idx) => (
-                      <div
-                        key={idx}
-                        className="d-flex flex-column p-2"
-                        style={{ width: laneWidth }}
-                      >
+                      const activeLanes = lanes.filter(
+                        (l) => l.value !== null && l.value !== "",
+                      );
+
+                      const laneWidth = `${100 / activeLanes.length}%`;
+
+                      return activeLanes.map((lane, idx) => (
                         <div
-                          className="lane-wrapper"
-                          style={{
-                            display: "flex",
-                            flexGrow: 1,
-                          }}
+                          key={idx}
+                          className="d-flex flex-column p-2"
+                          style={{ width: laneWidth }}
                         >
-                          {/* Main green box */}
                           <div
-                            className="lane-box"
-                            style={{
-                              background:
-                                "linear-gradient(145deg, #18c641, rgb(28, 123, 50))",
-                              boxShadow:
-                                "inset 1px 1px 10px rgb(85, 80, 80)",
-                              height: "auto",
-                              width: "100%",
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-
-                              borderTopLeftRadius: "10px",
-                              borderTopRightRadius: "10px",
-                              borderBottomLeftRadius: "50px",
-                              borderBottomRightRadius: "190px",
-                            }}
+                            className="lane-wrapper d-flex align-items-end justify-content-center"
+                            style={{ height: "100%" }}
                           >
-                            <div
-                              style={{
-                                fontSize: `clamp(4vh, ${70 / lane.value.length}vw, 18vh)`,
-                                lineHeight: "1",
-                                whiteSpace: "nowrap",
-                                overflow: "hidden",
-                              }}
-                            >
-                              <RootNumber rootNr={lane.value} />
+                            <div className="lane-box-container d-flex flex-column align-items-center">
+                              {/* Main green box */}
+                              <div
+                                className="lane-box"
+                                style={{
+                                  background:
+                                    "linear-gradient(145deg, #20f80383, rgb(28, 123, 50))",
+                                  boxShadow: "inset 1px 1px 10px rgb(0, 0, 0)",
+                                  height: "35%", // keeps it compact
+                                  maxWidth: "500px",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                  borderTopLeftRadius: "45px",
+                                  borderTopRightRadius: "45px",
+                                  borderBottomLeftRadius: "45px",
+                                  borderBottomRightRadius: "45px",
+                                  paddingLeft: "10px",
+                                  paddingRight: "10px",
+                                }}
+                              >
+                                <div
+                                  style={{
+                                    fontSize: "180px",
+                                    lineHeight: "1.3",
+                                    whiteSpace: "nowrap",
+                                    overflow: "hidden",
+                                  }}
+                                >
+                                  <RootNumber rootNr={lane.value} />
+                                </div>
+                              </div>
+
+                              {/* Reflection */}
+                              <div
+                                className="lane-reflection"
+                                style={{
+                                  width: "100%",
+                                  height: "60px",
+                                  marginTop: "5px",
+                                  background:
+                                    "linear-gradient(to bottom, rgb(0, 0, 0), rgba(0, 0, 0, 0.29))",
+                                  borderTopLeftRadius: "50px",
+                                  borderTopRightRadius: "50px",
+
+                                  filter: "blur(10px)",
+                                  opacity: 0.7,
+                                }}
+                              ></div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    ));
-                  })()}
-                </div>
-              ))
-            )}
+                      ));
+                    })()}
+                  </div>
+                ))
+              )}
+            </div>
           </div>
         </div>
-      </div>
-      {/* Bottom Section */}
-      {portInfo && portInfo.some((item) => item.msg !== null) && (
+
+        {/* Bottom Section — 30% */}
         <div
-          className="bg-dark text-white d-flex align-items-center justify-content-center text-center position-relative overflow-hidden"
-          style={{ height: "15vh" }}
+          className="d-flex align-items-center justify-content-center text-center position-relative overflow-hidden"
+          style={{
+            flex: "0 0 30%",
+            background:
+              portInfo && portInfo.some((item) => item.msg)
+                ? "orange"
+                : "black",
+            color:
+              portInfo && portInfo.some((item) => item.msg) ? "black" : "white",
+          }}
         >
-          {/* Message Text */}
-          <div style={{ position: "relative", zIndex: 2 }}>
+          {portInfo && portInfo.some((item) => item.msg) ? (
             <h1
-              className="blinking-text fw-bold "
+              className="blinking-text fw-bold"
               style={{ fontSize: "calc(6vh + 2vw)", whiteSpace: "nowrap" }}
             >
               {portInfo.find((item) => item.msg)?.msg}
             </h1>
-          </div>
+          ) : null}
 
+          {/* Blinking + Rotation animation CSS */}
           <style>
             {`
-              @keyframes blinkEffect {
-                0% { opacity: 0; }
-                50% { opacity: 0.9; }
-                100% { opacity: 1; }
-              }
+  @keyframes blinkEffect {
+    0% { opacity: 0; }
+    50% { opacity: 0.9; }
+    100% { opacity: 1; }
+  }
 
-              .blinking-text {
-                animation: blinkEffect 2s infinite ease-in-out;
-              }
-            `}
+  @keyframes rotateY360 {
+    0% { transform: rotateY(0deg); }
+    100% { transform: rotateY(360deg); }
+  }
+
+  .blinking-text {
+    animation: blinkEffect 2s infinite ease-in-out;
+  }
+`}
           </style>
         </div>
-      )}
+      </div>
     </div>
   );
 }

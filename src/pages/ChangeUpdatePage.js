@@ -126,10 +126,6 @@ export default function ChangeUpdatePage() {
           <img src="/arla-logo.png" alt="Logo" style={{ maxWidth: "100px" }} />
         </div>
 
-        <h2 className="text-center text-success fw-bold mb-4 border-bottom pb-2">
-          Ändra / Uppdatera Information
-        </h2>
-
         <form onSubmit={handleSubmit}>
           {/* Port selection */}
           <div className="border bg-success bg-opacity-25 mb-4 text-center p-3 rounded">
