@@ -3,7 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import supabase from "../Utilities/supabase";
 import { useNavigate } from "react-router-dom";
 
-export default function ChangeUpdatePage() {
+export default function PortEditPage() {
   const [selectedPortNumber, setSelectedPortNumber] = useState("");
   const [lane_1, setLane_1] = useState("");
   const [lane_2, setLane_2] = useState("");

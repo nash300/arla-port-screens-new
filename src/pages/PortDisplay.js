@@ -1,12 +1,4 @@
-/* ////////////////////////////////////////////////////////////////////////////////////////// 
-PURPOSE:
-This is the page that the display screen shows.
 
-FUNCTIONALITY:
-* Retrieves information to be displayed for the corresponding port screen.
-* Communicates with Supabase for real-time updates.
-* If no records exist for that port, displays a default image.
-/////////////////////////////////////////////////////////////////////////////////////////// */
 
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -112,7 +104,6 @@ export default function PortDisplay() {
 
       {/* Middle + Bottom Wrapper */}
       <div className="d-flex flex-column" style={{ height: "80vh" }}>
-        {/* Middle Section — 70% */}
         {/* Middle Section — 70% */}
         <div
           className="d-flex justify-content-center position-relative"
