@@ -35,6 +35,8 @@ export default function TorgetDisplay() {
   }, []);
 
   useEffect(() => {
+    let reloadTimeout = null;
+
     const channel = supabase
       .channel("realtime-torget")
       .on(
@@ -44,12 +46,23 @@ export default function TorgetDisplay() {
           schema: "public",
           table: "torget",
         },
-        () => fetchTorgetData(),
+        () => {
+          // Debounce to avoid multiple reloads
+          if (reloadTimeout) clearTimeout(reloadTimeout);
+
+          reloadTimeout = setTimeout(() => {
+            window.location.reload();
+          }, 150); // small delay ensures layout is stable
+        },
       )
       .subscribe();
 
-    return () => supabase.removeChannel(channel);
+    return () => {
+      if (reloadTimeout) clearTimeout(reloadTimeout);
+      supabase.removeChannel(channel);
+    };
   }, []);
+
 
   return (
     <div className="vh-100 d-flex flex-column overflow-hidden">
@@ -121,22 +134,24 @@ export default function TorgetDisplay() {
                         borderTop: "1px solid #ffffff",
                       }}
                     >
-                      <div
-                        style={{
-                          background:
-                            "linear-gradient(145deg, #20f80383, rgb(28, 123, 50))",
-                          boxShadow: "inset 1px 1px 10px rgb(0, 0, 0)",
-                          borderRadius: "5px",
-                          padding: "0.5rem 1rem",
-                          width: "100%",
-                          height: "100%",
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                        }}
-                      >
-                        <RootNumber rootNr={value} />
-                      </div>
+                      {value && value.trim() !== "" ? (
+                        <div
+                          style={{
+                            background:
+                              "linear-gradient(145deg, #20f80383, rgb(28, 123, 50))",
+                            boxShadow: "inset 1px 1px 10px rgb(0, 0, 0)",
+                            borderRadius: "5px",
+                            padding: "0.5rem 1rem",
+                            width: "100%",
+                            height: "100%",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          <RootNumber rootNr={value} />
+                        </div>
+                      ) : null}
                     </div>
                   </div>
                 </div>
