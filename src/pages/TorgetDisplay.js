@@ -7,52 +7,81 @@ export default function TorgetDisplay() {
   const [lanes, setLanes] = useState(Array(11).fill(""));
   const [message, setMessage] = useState("");
 
+  // Fetch lanes + message
   const fetchTorgetData = async () => {
     try {
-      const { data, error } = await supabase
+      // Fetch lanes
+      const { data: laneData } = await supabase
         .from("torget")
         .select("*")
         .order("id", { ascending: true });
 
-      if (error) {
-        console.error("Supabase query error:", error);
-        return;
+      if (laneData) {
+        const laneValues = laneData.map((row) => row.rootNr || "");
+        setLanes(laneValues);
       }
 
-      // Map DB rows → lane values
-      const laneValues = data.map((row) => row.rootNr || "");
-      setLanes(laneValues);
+      // Fetch latest message
+      const { data: msgData } = await supabase
+        .from("torg_msg")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(1);
 
-      // If you later add a message column:
-      // setMessage(data[0]?.message || "");
+      if (msgData && msgData.length > 0) {
+        const m = msgData[0];
+
+        const createdAt = new Date(m.created_at);
+        const expiresAt = new Date(
+          createdAt.getTime() + m.duration_minutes * 60000,
+        );
+        const now = new Date();
+
+        if (now < expiresAt) {
+          setMessage(m.msg_text);
+        } else {
+          setMessage("");
+        }
+      } else {
+        setMessage("");
+      }
     } catch (err) {
       console.error("Unexpected error:", err);
     }
   };
 
+  // Initial load
   useEffect(() => {
     fetchTorgetData();
   }, []);
 
+  // Auto-refresh message every 30 seconds
+  useEffect(() => {
+    const interval = setInterval(fetchTorgetData, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Realtime updates for lanes + messages
   useEffect(() => {
     let reloadTimeout = null;
 
     const channel = supabase
-      .channel("realtime-torget")
+      .channel("realtime-torget-display")
       .on(
         "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "torget",
-        },
+        { event: "*", schema: "public", table: "torget" },
         () => {
-          // Debounce to avoid multiple reloads
           if (reloadTimeout) clearTimeout(reloadTimeout);
-
           reloadTimeout = setTimeout(() => {
             window.location.reload();
-          }, 150); // small delay ensures layout is stable
+          }, 150);
+        },
+      )
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "torg_msg" },
+        () => {
+          fetchTorgetData();
         },
       )
       .subscribe();
@@ -62,7 +91,6 @@ export default function TorgetDisplay() {
       supabase.removeChannel(channel);
     };
   }, []);
-
 
   return (
     <div className="vh-100 d-flex flex-column overflow-hidden">
@@ -102,19 +130,19 @@ export default function TorgetDisplay() {
             {lanes.map((value, i) => (
               <div key={i} style={{ width: "100%", height: "100%" }}>
                 <div
-                  className="card shadow-sm border-dark border-3 border-top-0"
+                  className="card shadow-sm border-top-0"
                   style={{ width: "100%", height: "100%" }}
                 >
                   {/* Lane number */}
                   <div
-                    className="card-header bg-dark text-light fw-bold text-center"
                     style={{
                       fontSize: "clamp(1.2rem, 2vw, 2.5rem)",
                       textShadow: "0 0 6px rgba(12, 12, 12, 0.6)",
-                      padding: "0.1rem 0",
                     }}
                   >
-                    {i + 1}
+                    <h1 className="card-header bg-dark text-light fw-bolder text-center">
+                      {i + 1}
+                    </h1>
                   </div>
 
                   {/* Lane content */}
@@ -126,33 +154,24 @@ export default function TorgetDisplay() {
                       borderTop: "1px solid #ffffff",
                     }}
                   >
-                    <div
-                      className="card-body d-flex justify-content-center align-items-center bg-light"
-                      style={{
-                        overflow: "hidden",
-                        padding: "0.1rem",
-                        borderTop: "1px solid #ffffff",
-                      }}
-                    >
-                      {value && value.trim() !== "" ? (
-                        <div
-                          style={{
-                            background:
-                              "linear-gradient(145deg, #20f80383, rgb(28, 123, 50))",
-                            boxShadow: "inset 1px 1px 10px rgb(0, 0, 0)",
-                            borderRadius: "5px",
-                            padding: "0.5rem 1rem",
-                            width: "100%",
-                            height: "100%",
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                          }}
-                        >
-                          <RootNumber rootNr={value} />
-                        </div>
-                      ) : null}
-                    </div>
+                    {value && value.trim() !== "" ? (
+                      <div
+                        style={{
+                          background:
+                            "linear-gradient(145deg, #20f80383, rgb(28, 123, 50))",
+                          boxShadow: "inset 1px 1px 10px rgb(0, 0, 0)",
+                          borderRadius: "5px",
+                          padding: "0.5rem 1rem",
+                          width: "100%",
+                          height: "100%",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <RootNumber rootNr={value} />
+                      </div>
+                    ) : null}
                   </div>
                 </div>
               </div>
