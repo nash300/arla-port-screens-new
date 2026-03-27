@@ -81,14 +81,17 @@ export default function TorgetDisplay() {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(11, 1fr)",
+              gridTemplateColumns: "repeat(11, minmax(0, 1fr))",
               gap: "0.25rem",
               height: "100%",
             }}
           >
             {lanes.map((value, i) => (
-              <div key={i} className="h-100 d-flex">
-                <div className="card w-100 h-100 shadow-sm border-dark border-3 border-top-0">
+              <div key={i} style={{ width: "100%", height: "100%" }}>
+                <div
+                  className="card shadow-sm border-dark border-3 border-top-0"
+                  style={{ width: "100%", height: "100%" }}
+                >
                   {/* Lane number */}
                   <div
                     className="card-header bg-dark text-light fw-bold text-center"
@@ -101,35 +104,35 @@ export default function TorgetDisplay() {
                     {i + 1}
                   </div>
 
-                  {/* Lane content using your green box + RootNumber */}
+                  {/* Lane content */}
                   <div
                     className="card-body d-flex justify-content-center align-items-center bg-light"
                     style={{
-                      fontSize: "clamp(0.9rem, 1.5vw, 2rem)",
                       overflow: "hidden",
                       padding: "0.5rem",
                       borderTop: "1px solid #ffffff",
                     }}
                   >
                     <div
+                      className="card-body d-flex justify-content-center align-items-center bg-light"
                       style={{
-                        background:
-                          "linear-gradient(145deg, #20f80383, rgb(28, 123, 50))",
-                        boxShadow: "inset 1px 1px 10px rgb(0, 0, 0)",
-                        borderRadius: "5px",
-                        padding: "0.5rem 1rem",
-                        minWidth: "80%",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
+                        overflow: "hidden",
+                        padding: "0.5rem",
+                        borderTop: "1px solid #ffffff",
                       }}
                     >
                       <div
                         style={{
-                          fontSize: "clamp(1.5rem, 3vw, 4rem)",
-                          whiteSpace: "nowrap",
-                          overflow: "hidden",
-                          lineHeight: 1.2,
+                          background:
+                            "linear-gradient(145deg, #20f80383, rgb(28, 123, 50))",
+                          boxShadow: "inset 1px 1px 10px rgb(0, 0, 0)",
+                          borderRadius: "5px",
+                          padding: "0.5rem 1rem",
+                          width: "100%",
+                          height: "100%",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
                         }}
                       >
                         <RootNumber rootNr={value} />
