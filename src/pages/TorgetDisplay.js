@@ -5,7 +5,7 @@ import RootNumber from "../components/RootNumber";
 
 export default function TorgetDisplay() {
   const [lanes, setLanes] = useState(Array(11).fill(""));
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState("eet t het h rt heth tjhtr ht tjtr jhe rhre herher h");
 
   const fetchTorgetData = async () => {
     try {
@@ -111,7 +111,7 @@ export default function TorgetDisplay() {
                     style={{
                       fontSize: "clamp(1.2rem, 2vw, 2.5rem)",
                       textShadow: "0 0 6px rgba(12, 12, 12, 0.6)",
-                      padding: "0.4rem 0",
+                      padding: "0.1rem 0",
                     }}
                   >
                     {i + 1}
@@ -122,7 +122,7 @@ export default function TorgetDisplay() {
                     className="card-body d-flex justify-content-center align-items-center bg-light"
                     style={{
                       overflow: "hidden",
-                      padding: "0.5rem",
+                      padding: "0.1rem",
                       borderTop: "1px solid #ffffff",
                     }}
                   >
@@ -130,7 +130,7 @@ export default function TorgetDisplay() {
                       className="card-body d-flex justify-content-center align-items-center bg-light"
                       style={{
                         overflow: "hidden",
-                        padding: "0.5rem",
+                        padding: "0.1rem",
                         borderTop: "1px solid #ffffff",
                       }}
                     >
@@ -164,8 +164,8 @@ export default function TorgetDisplay() {
         <div
           className={
             message.trim()
-              ? "d-flex justify-content-center align-items-center p-3 bg-warning"
-              : "d-flex justify-content-center align-items-center p-3 bg-secondary text-white"
+              ? "d-flex justify-content-center align-items-center p-5 bg-warning"
+              : "d-flex justify-content-center align-items-center p-5 bg-secondary text-white"
           }
           style={{ height: "60%", overflow: "hidden" }}
         >
