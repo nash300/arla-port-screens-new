@@ -5,7 +5,7 @@ import RootNumber from "../components/RootNumber";
 
 export default function TorgetDisplay() {
   const [lanes, setLanes] = useState(Array(11).fill(""));
-  const [message, setMessage] = useState("eet t het h rt heth tjhtr ht tjtr jhe rhre herher h");
+  const [message, setMessage] = useState("");
 
   const fetchTorgetData = async () => {
     try {
