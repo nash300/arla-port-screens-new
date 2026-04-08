@@ -74,7 +74,7 @@ const RootNumber = ({ rootNr }) => {
             <span
               key={i}
               style={{
-                color: isLetter ? "#ff9d00" : "white",
+                color: isLetter ? "#ff5e0e" : "white",
                 textShadow: isLetter
                   ? "0px 0px 12px rgba(0, 0, 0, 0.75)"
                   : "1px 12px 15px rgba(55, 115, 47, 0.97)",
