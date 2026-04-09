@@ -1,5 +1,3 @@
-
-
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import supabase from "../Utilities/supabase";
@@ -90,7 +88,7 @@ export default function PortDisplay() {
             src="/arla-logo.png"
             alt="Logo"
             className="img-fluid"
-            style={{ maxWidth: "120px" }}
+            style={{ maxWidth: "200px" }}
           />
           <h1
             className="m-0 fw-bolder"
@@ -238,10 +236,7 @@ export default function PortDisplay() {
           className="d-flex align-items-center justify-content-center text-center position-relative overflow-hidden"
           style={{
             flex: "0 0 30%",
-            background:
-              portInfo && portInfo.some((item) => item.msg)
-                ? "orange"
-                : "black",
+            background: "black",
             color:
               portInfo && portInfo.some((item) => item.msg) ? "black" : "white",
           }}
@@ -249,7 +244,11 @@ export default function PortDisplay() {
           {portInfo && portInfo.some((item) => item.msg) ? (
             <h1
               className="blinking-text fw-bold"
-              style={{ fontSize: "calc(6vh + 2vw)", whiteSpace: "nowrap" }}
+              style={{
+                fontSize: "calc(6vh + 2vw)",
+                whiteSpace: "nowrap",
+                color: "orange",
+              }}
             >
               {portInfo.find((item) => item.msg)?.msg}
             </h1>
