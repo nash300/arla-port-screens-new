@@ -1,0 +1,7 @@
+-----Instruction for deployment-----
+
+1. ---- Rebuild Your React App
+npm run build
+
+2. ---- Deploy the Updated Build to Firebase
+firebase deploy

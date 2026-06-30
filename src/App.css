@@ -1,0 +1,52 @@
+.App {
+  text-align: center;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+/* Fullscreen Container */
+.middle-container {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f0f4f8;
+  /* Light modern background */
+  padding: 20px;
+}
+
+/* Remove default button styles */
+button.port-card {
+  display: block;
+  width: 100%;
+  height: 75px;
+  color: #f0f4f8;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); 
+}
+
+/* Green Gradient Card Style */
+.port-card {
+  /* Green gradient */
+  color: #f0f4f8;
+  cursor: pointer;
+}
+
+/* Hover Effect */
+.port-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+.card-text {
+  font-size: 20px;
+  color: white;
+}
